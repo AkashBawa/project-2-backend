@@ -1,5 +1,6 @@
 import UsersModel from './../models/user.js';
 import byScruptService from "./../services/bycrypt.js";
+import jwtService from "./../services/jsonWebToken.js";
 
 
 export default {
@@ -21,14 +22,19 @@ export default {
 
     login: async (req, res, next) => {
         try {
+
             const { email, password } = req.body;
 
             const userData = await UsersModel.findOne({email});
             console.log(userData);
-            await byScruptService.comparePassword(password, userData.password)
+            await byScruptService.comparePassword(password, userData.password);
+
+            const generateToken = await jwtService.generateToken( {userId: userData._id} );
+
             return res.json({
                 success: true,
-                message: "Password match"
+                message: "Password match",
+                token : generateToken
             })
         } catch (err) {
             next(err)
