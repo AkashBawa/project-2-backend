@@ -11,9 +11,13 @@ export default {
             const { email, password, role, userName } = req.body;
             const hash = await byScruptService.generateHash(password);
             const newUser = await new UsersModel({email, password: hash, role, userName}).save();
+            const generateToken = await jwtService.generateToken( {userId: newUser._id, role: newUser.role} );
             return res.json({
+                success: true,
                 message : "Signup success",
-                user : newUser
+                user : newUser,
+                role: newUser.role,
+                token: generateToken
             })
         } catch (err) {
             next(err)
@@ -29,12 +33,13 @@ export default {
             console.log(userData);
             await byScruptService.comparePassword(password, userData.password);
 
-            const generateToken = await jwtService.generateToken( {userId: userData._id} );
+            const generateToken = await jwtService.generateToken( {userId: userData._id, role: userData.role} );
 
             return res.json({
                 success: true,
                 message: "Password match",
-                token : generateToken
+                token : generateToken,
+                role: userData.role
             })
         } catch (err) {
             next(err)
