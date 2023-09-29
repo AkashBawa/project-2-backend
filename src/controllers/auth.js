@@ -39,5 +39,26 @@ export default {
         } catch (err) {
             next(err)
         }
-    }
+    },
+    addElderProfile: async (req, res, next) => {
+      try {
+        const { name, lName, age, gender, contactNumber, interest, eContact } =
+          req.body;
+        console.log("Received form data:", {
+          name,
+          lName,
+          age,
+          gender,
+          contactNumber,
+          interest,
+          eContact,
+        });
+  
+        return res.json({
+          message: "Profile added successfully",
+        });
+      } catch (err) {
+        next(err);
+      }
+    },
 }

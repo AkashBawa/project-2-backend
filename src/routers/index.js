@@ -6,6 +6,8 @@ const router = express.Router();
 router.post('/signup', UserController.signup);
 router.post('/login', UserController.login);
 
-router.get("/postList", JWtService.validateToken)
+router.get("/postList", JWtService.validateToken);
+
+router.post("/addElder", JWtService.validateToken ,UserController.addElderProfile);
 
 export default router;
