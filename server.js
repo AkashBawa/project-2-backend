@@ -7,8 +7,6 @@ import dbConnection from "./src/config/db.js";
 import cors from 'cors';
 import bodyParser from "body-parser";
 
-
-
 const app = express();
 await dbConnection()
 
@@ -16,7 +14,7 @@ app.use(cors());
 app.use(express.json())
 app.use(bodyParser.urlencoded({
     extended: true
-  }));
+}));
 app.use(Router);
 
 app.use ((err, req, res, next) => {
@@ -30,6 +28,7 @@ app.use ((err, req, res, next) => {
 })
 
 const port = process.env.PORT || 4000;
+
 const server  = http.createServer(app);
 server.listen( port, () => {
     console.log( `server started at port : ${ port }` );

@@ -25,10 +25,13 @@ const validateToken = async (req, res, next) => {
     try {
         const userToken = req.headers.token;
         const data = jwt.verify(userToken , secret);
-        console.log(data);
-        res.json({
-            data
-        })
+        req.user = {
+            id: data.userId,
+            role: data.role
+        }
+
+        next();
+
     } catch (err) {
         next(err)
     } 
