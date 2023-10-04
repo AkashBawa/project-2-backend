@@ -43,7 +43,8 @@ export default {
                 success: true,
                 message: "Password match",
                 token : generateToken,
-                role: userData.role
+                role: userData.role,
+                userId: userData.id
             })
         } catch (err) {
             next(err)

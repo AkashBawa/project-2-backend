@@ -97,12 +97,12 @@ const sendInvitation = async (req, res, next) => {
         const userId = req.user.id;
 
         const fetchPost = await postModel.findById(postId);
-        let invitations = fetchPost.invitations;
+        let invitations = fetchPost.toObject().invitations;
 
         if(!invitations || invitations.length == 0) {
             invitations = [ { user: userId, status: "PENDING"} ];    
         } else {
-            const index = invitations.indexOf(userId);
+            const index = invitations.map((invite) => invite.user.toString()).indexOf(userId);
             if(index > -1) {
                 throw new Error("User already has an invite");
             } else {
@@ -112,11 +112,12 @@ const sendInvitation = async (req, res, next) => {
         
         fetchPost.invitations = invitations;
 
-        await fetchPost.save();
+        const updatePost = await fetchPost.save();
 
         return res.json({
             success: true,
-            message: "Invitation send successfully"
+            message: "Invitation send successfully",
+            updatePost
         })
 
     } catch (err) {
@@ -166,12 +167,10 @@ const invitationResponse = async (req, res, next) => {
             currentPost.status = "BOOKED"
         };
 
-        const newPost = await currentPost.save();
-
         return res.json({
             success: true,
             message: "Status updated",
-            newPost
+
         })
         
 
