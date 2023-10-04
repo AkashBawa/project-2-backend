@@ -24,6 +24,16 @@ export default {
           next(err);
         }
       },
+
+
+      getVolProfile: async (req,res) => {
+          try {
+            const user = await UsersModel.findById(req.user.id)
+            return res.json(user)
+          } catch (err) {
+            console.log(err)
+          }
+      }
     
 
 }
