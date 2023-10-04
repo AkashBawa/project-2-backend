@@ -166,11 +166,12 @@ const invitationResponse = async (req, res, next) => {
             currentPost.status = "BOOKED"
         };
 
-        await currentPost.save();
+        const newPost = await currentPost.save();
 
         return res.json({
             success: true,
-            message: "Status updated"
+            message: "Status updated",
+            newPost
         })
         
 
