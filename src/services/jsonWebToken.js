@@ -6,7 +6,7 @@ const generateToken = async (payload) => {
 
         return new Promise((resolve, reject) => {
 
-            jwt.sign( payload, secret, { expiresIn: "1h" }, (err, token) => {
+            jwt.sign( payload, secret, { expiresIn: "24h" }, (err, token) => {
                 if(err) {
                     throw err
                 }

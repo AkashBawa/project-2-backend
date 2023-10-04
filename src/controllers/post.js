@@ -56,7 +56,22 @@ const fetchPost = async (req, res, next) => {
                 }
             }
         }
-        const posts = await postModel.find(query);
+        const posts = await postModel.find(query).populate('userId');
+        return res.json({
+            success: true,
+            posts
+        })
+
+    } catch (err) {
+        next (err);
+    }
+}
+
+const fetchPostByUser = async (req, res, next) => {
+    try {
+
+        const userId = req.user.id;
+        const posts = await postModel.find({userId}).populate('invitations.user');
         return res.json({
             success: true,
             posts
@@ -73,8 +88,41 @@ const editPost = async (req, res, next) => {
     } catch (err) {
         next (err);
     }
-}
+};
 
+const sendInvitation = async (req, res, next) => {
+    try {
+
+        const postId = req.body.postId;
+        const userId = req.user.id;
+
+        const fetchPost = await postModel.findById(postId);
+        let invitations = fetchPost.invitations;
+
+        if(!invitations || invitations.length == 0) {
+            invitations = [ { user: userId, status: "PENDING"} ];    
+        } else {
+            const index = invitations.indexOf(userId);
+            if(index > -1) {
+                throw new Error("User already has an invite");
+            } else {
+                invitations.push( { user: userId, status: "PENDING"})
+            }
+        }
+        
+        fetchPost.invitations = invitations;
+
+        await fetchPost.save();
+
+        return res.json({
+            success: true,
+            message: "Invitation send successfully"
+        })
+
+    } catch (err) {
+        next(err);
+    }
+}
 
 const deletePost = async (req, res, next) => {
     try {
@@ -84,9 +132,59 @@ const deletePost = async (req, res, next) => {
     }
 }
 
+const invitationResponse = async (req, res, next) => {
+    try {
+
+        const userId = req.user.id;
+        const { postId, acceptedUserId, status } = req.body;
+
+        if( !(status == "REJECTED" || status == "ACCEPTED")) {
+            throw new Error("Invalid status");
+        }
+
+        const currentPost = await postModel.findById(postId);
+        
+        const objectVersion = currentPost.toObject();
+
+        let index = -1;
+
+        for( let i = 0; i < objectVersion.invitations.length; i++) {
+            const invite = objectVersion.invitations[i];
+            if(invite.user == acceptedUserId) {
+                index = i;
+                break;
+            }
+        }
+
+        if(index == -1 ) {
+            throw new Error("No user found")
+        };
+
+        currentPost.invitations[index].status = status;
+
+        if(status == "ACCEPTED") {
+            currentPost.status = "BOOKED"
+        };
+
+        await currentPost.save();
+
+        return res.json({
+            success: true,
+            message: "Status updated"
+        })
+        
+
+    } catch (err) {
+        next(err)
+    }
+}
+
 export default {
     fetchPost,
     addPost,
     editPost,
-    deletePost
+    deletePost,
+    sendInvitation,
+    fetchPostByUser,
+    invitationResponse
 }

@@ -17,10 +17,12 @@ router.get("/user", JWtService.validateToken, ElderController.getUserProfile);
 router.post("/updateProfile", JWtService.validateToken, ElderController.updateUserProfile);
 router.post("/fetchPost", JWtService.validateToken, PostController.fetchPost);
 router.post("/addpost", JWtService.validateToken, PostController.addPost);
+router.put("/sendInvitation", JWtService.validateToken, PostController.sendInvitation);
 
 // volenteer Route
 router.post("/updateProfileVol", JWtService.validateToken, volenteerController.updateUserVolenteerProfile);
-
+router.get("/getPostByUser", JWtService.validateToken, PostController.fetchPostByUser);
+router.put('/responseInvitation', JWtService.validateToken, PostController.invitationResponse);
 
 // Volunteer routes
 

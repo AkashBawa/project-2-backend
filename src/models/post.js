@@ -47,7 +47,23 @@ const PostSchema = new Schema({
         enum: ['PENDING', 'BOOKED' ,'COMPLETED', 'DELETED'],
         required: true,
         default: "PENDING"
-    }
+    },
+
+    invitations: [
+        {
+            _id: false,
+            user : {
+                type: mongoose.Types.ObjectId,
+                ref: "user"
+            },
+
+            status: {
+                type: String,
+                enum: ['PENDING', 'REJECTED' ,'ACCEPTED'],
+                default: "PENDING"
+            }
+        }
+    ]
 
 }, {
     timestamps: true
