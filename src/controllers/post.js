@@ -145,13 +145,16 @@ const invitationResponse = async (req, res, next) => {
 
         const currentPost = await postModel.findById(postId);
         
+        if(currentPost.status === "BOOKED" ) {
+            throw new Error("Booked Already")
+        }
         const objectVersion = currentPost.toObject();
 
         let index = -1;
 
         for( let i = 0; i < objectVersion.invitations.length; i++) {
             const invite = objectVersion.invitations[i];
-            if(invite.user == acceptedUserId) {
+            if(invite.user.toString() == acceptedUserId ) {
                 index = i;
                 break;
             }
@@ -166,7 +169,7 @@ const invitationResponse = async (req, res, next) => {
         if(status == "ACCEPTED") {
             currentPost.status = "BOOKED"
         };
-
+        await currentPost.save();
         return res.json({
             success: true,
             message: "Status updated",
