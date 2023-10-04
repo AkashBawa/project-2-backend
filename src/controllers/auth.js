@@ -22,6 +22,7 @@ export default {
                 role: newUser.role,
                 token: generateToken
             })
+
         } catch (err) {
             next(err)
         }

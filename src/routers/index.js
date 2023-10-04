@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/signup', UserController.signup);
 router.post('/login', UserController.login);
 router.get("/postList", JWtService.validateToken);
-router.get("/user", JWtService.validateToken, ElderController.getElderProfile);
+router.get("/user", JWtService.validateToken, ElderController.getUserProfile);
 
 // Elder routes
 router.post("/updateProfile", JWtService.validateToken, ElderController.updateUserProfile);
