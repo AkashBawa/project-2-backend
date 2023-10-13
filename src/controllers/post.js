@@ -43,7 +43,9 @@ const fetchPost = async (req, res, next) => {
         const coordiates = req.body.location;
         const maxDistace = req.body.maxDistace ? req.body.maxDistace : 5000;
 
-        let query = {};
+        let query = {
+            status: "PENDING"
+        }
         
         if(coordiates) {
             query.location = {
