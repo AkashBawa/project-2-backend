@@ -63,7 +63,12 @@ const PostSchema = new Schema({
                 default: "PENDING"
             }
         }
-    ]
+    ],
+
+    acceptedVolunteerId: {
+        type: mongoose.Types.ObjectId,
+        ref: "user"
+    }
 
 }, {
     timestamps: true

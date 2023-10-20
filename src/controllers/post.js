@@ -184,6 +184,22 @@ const invitationResponse = async (req, res, next) => {
     }
 }
 
+const fetchPostByVolunteer = async (req, res, next) => {
+    try {
+
+        const userId = req.user.id;
+        const postDetails = await postModel.find({"invitations.user" : userId});
+
+        return res.json({
+            success: true,
+            data: postDetails
+        });
+
+    } catch (err) {
+        next(err)
+    }
+}
+
 export default {
     fetchPost,
     addPost,
@@ -191,5 +207,6 @@ export default {
     deletePost,
     sendInvitation,
     fetchPostByUser,
-    invitationResponse
+    invitationResponse,
+    fetchPostByVolunteer
 }

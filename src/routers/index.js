@@ -4,7 +4,7 @@ import  JWtService from "./../services/jsonWebToken.js";
 import PostController from "./../controllers/post.js";
 import ElderController from "./../controllers/elder.js"
 import volenteerController from '../controllers/volenteer.js';
-
+import EventsController from "./../controllers/events.js"
 
 const router = express.Router();
 
@@ -23,6 +23,8 @@ router.put("/sendInvitation", JWtService.validateToken, PostController.sendInvit
 router.post("/updateProfileVol", JWtService.validateToken, volenteerController.updateUserVolenteerProfile);
 router.get("/getPostByUser", JWtService.validateToken, PostController.fetchPostByUser);
 router.put('/responseInvitation', JWtService.validateToken, PostController.invitationResponse);
+router.post("/createEvent", JWtService.validateToken, EventsController.createEvents);
+router.get("/volunteerPosts", JWtService.validateToken, PostController.fetchPostByVolunteer);
 
 // Volunteer routes
 
