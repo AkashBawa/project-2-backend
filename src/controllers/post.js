@@ -170,6 +170,7 @@ const invitationResponse = async (req, res, next) => {
 
         if(status == "ACCEPTED") {
             currentPost.status = "BOOKED"
+            currentPost.acceptedVolunteerId = acceptedUserId;
         };
         await currentPost.save();
         return res.json({
