@@ -49,6 +49,16 @@ const PostSchema = new Schema({
         default: "PENDING"
     },
 
+    rating: {
+        type: Number,
+        required: false
+    },
+
+    review: {
+        type: String,
+        required: false
+    },
+
     invitations: [
         {
             _id: false,

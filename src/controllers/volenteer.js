@@ -1,5 +1,6 @@
 import UsersModel from "../models/user.js"
-
+import postModel from './../models/post.js'
+import mongoose from "mongoose";
 
 
 export default {
@@ -33,7 +34,35 @@ export default {
           } catch (err) {
             console.log(err)
           }
-      }
+      },
+
+      getRating: async (req,res) => {
+        try {
+          const userId = new mongoose.Types.ObjectId(req.user.id);
+          const rating = await postModel.aggregate([
+              {
+                  $match: {
+                    acceptedVolunteerId: userId,
+                  },
+              },
+              {
+                  $group: {
+                    _id: null,
+                    ratingAvg: {
+                      $avg: "$rating"
+                    }
+                  }
+              }
+          ]).exec()
+
+          res.json(rating)
+        } catch (err) {
+          console.log(err)
+        }
+    }
+
+
+      
     
 
 }

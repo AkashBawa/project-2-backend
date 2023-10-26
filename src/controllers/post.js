@@ -2,6 +2,8 @@
 import Joi from 'joi';
 import JoiServices from '../services/JoiServices.js';
 import postModel from "./../models/post.js";
+import userModel from '../models/user.js';
+
 
 const PostJoi = Joi.object({
     date: Joi.string().required(),
@@ -201,6 +203,33 @@ const fetchPostByVolunteer = async (req, res, next) => {
     }
 }
 
+
+const updateRating = async (req, res, next) => {
+    try {
+        const { rating, review, id } = req.body;
+        const status = "COMPLETED"
+        await postModel.findByIdAndUpdate(id, { rating, review, status });
+        const post = await postModel.findById(id)
+        let point = rating * 10
+        const user = await userModel.findById(post.acceptedVolunteerId)
+        if(user.point){
+            user.point = point + user.point
+        }else{
+            user.point = point
+        }
+        
+        await user.save()
+        return res.json({
+            success: true,
+        })
+    } catch (error) {
+        next(error)
+    }
+   
+}
+
+
+
 export default {
     fetchPost,
     addPost,
@@ -209,5 +238,8 @@ export default {
     sendInvitation,
     fetchPostByUser,
     invitationResponse,
-    fetchPostByVolunteer
+    fetchPostByVolunteer,
+    updateRating
 }
+
+

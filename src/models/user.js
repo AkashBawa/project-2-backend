@@ -52,6 +52,10 @@ const UserSchema = new Schema( {
         type: String,
         required: false,
       },
+      point: {
+        type: Number,
+        required: false
+      }
       
   
 }, {

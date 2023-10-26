@@ -18,6 +18,7 @@ router.post("/updateProfile", JWtService.validateToken, ElderController.updateUs
 router.post("/fetchPost", JWtService.validateToken, PostController.fetchPost);
 router.post("/addpost", JWtService.validateToken, PostController.addPost);
 router.put("/sendInvitation", JWtService.validateToken, PostController.sendInvitation);
+router.post("/updateRating", JWtService.validateToken, PostController.updateRating)
 
 // volenteer Route
 router.post("/updateProfileVol", JWtService.validateToken, volenteerController.updateUserVolenteerProfile);
@@ -25,6 +26,7 @@ router.get("/getPostByUser", JWtService.validateToken, PostController.fetchPostB
 router.put('/responseInvitation', JWtService.validateToken, PostController.invitationResponse);
 router.post("/createEvent", JWtService.validateToken, EventsController.createEvents);
 router.get("/volunteerPosts", JWtService.validateToken, PostController.fetchPostByVolunteer);
+router.get("/averageRating", JWtService.validateToken, volenteerController.getRating)
 
 // Volunteer routes
 
