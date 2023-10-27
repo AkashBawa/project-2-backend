@@ -27,6 +27,7 @@ router.put('/responseInvitation', JWtService.validateToken, PostController.invit
 router.post("/createEvent", JWtService.validateToken, EventsController.createEvents);
 router.get("/volunteerPosts", JWtService.validateToken, PostController.fetchPostByVolunteer);
 router.get("/averageRating", JWtService.validateToken, volenteerController.getRating)
+router.get("/getReview", JWtService.validateToken, volenteerController.getReview)
 
 // Volunteer routes
 
