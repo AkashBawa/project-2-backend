@@ -63,8 +63,8 @@ export default {
 
     getReview: async (req,res) => {
       try {
-        const points = await UsersModel.findOne({ point: { $ne: null } });
-      res.json(points);
+        const review = await postModel.findOne({ review: { $ne: null } });
+      res.json(review);
       } catch (error) {
         console.log(error)
       }
