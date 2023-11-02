@@ -47,7 +47,15 @@ const EventShema = new Schema({
     image : {
         type: String,
         required: true
-    }
+    },
+
+    participants : [
+        {
+            _id: false,
+            type: mongoose.Types.ObjectId,
+            ref: "user"
+        }
+    ]
 }, {timestamps: true});
 
 const eventSchema = model('event', EventShema);

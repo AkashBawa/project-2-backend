@@ -32,5 +32,7 @@ router.get("/getReview", JWtService.validateToken, volenteerController.getReview
 
 // events
 router.get("/eventList", JWtService.validateToken, EventsController.fetchEvents);
+router.post("/joinEvent". JWtService.validateToken, EventsController.joinEvent);
+router.get("/fetchJoinedEvent". JWtService.validateToken, EventsController.fetchAllJoinedEvents);
 
 export default router;
