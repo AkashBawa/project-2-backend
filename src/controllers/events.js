@@ -8,7 +8,8 @@ const EventsJoi = Joi.object({
     location: Joi.string().required(),
     date: Joi.date().required(),
     startTime: Joi.string().required(),
-    endTime: Joi.string().required()
+    endTime: Joi.string().required(),
+    image: Joi.string().required()
 
 });
 
@@ -25,9 +26,23 @@ const createEvents = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
+};
+
+const fetchEvents = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const events = await EventsM.find({"userId" : {$ne : userId}});
+        return res.json({
+            success: true,
+            events
+        })
+    } catch (err) {
+        next(err);
+    }
 }
 
 
 export default {
-    createEvents
+    createEvents,
+    fetchEvents
 }
