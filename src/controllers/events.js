@@ -9,7 +9,8 @@ const EventsJoi = Joi.object({
     date: Joi.date().required(),
     startTime: Joi.string().required(),
     endTime: Joi.string().required(),
-    image: Joi.string().required()
+    image: Joi.string().required(),
+    specialNote: Joi.string().optional()
 
 });
 

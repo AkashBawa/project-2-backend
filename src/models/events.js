@@ -55,7 +55,10 @@ const EventShema = new Schema({
             type: mongoose.Types.ObjectId,
             ref: "user"
         }
-    ]
+    ],
+    specialNote : {
+        type: String
+    }
 }, {timestamps: true});
 
 const eventSchema = model('event', EventShema);
