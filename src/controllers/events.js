@@ -54,6 +54,14 @@ const joinEvent = async (req, res, next) => {
 
         const event = await EventsM.findById(eventId);
         if (event && event.participants) {
+
+            const index =  event.participants.map((participant) => participant.toString()).indexOf(userId);
+            if(index > -1) {
+                throw new Error("User has already participated");
+            } else {
+                event.participants.push(userId)
+            }
+
             event.participants.push(userId)
         } else {
             event.participants = [userId]
