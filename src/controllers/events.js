@@ -83,7 +83,7 @@ const fetchAllJoinedEvents = async (req, res, next) => {
 
         const userId = req.user.id;
 
-        const events = await EventsM.find({ participants: userId });
+        const events = await EventsM.find( { $or: [ { participants: userId }, {userId : userId} ]  });
 
         return res.json({
             success: true,
