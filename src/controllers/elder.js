@@ -13,7 +13,8 @@ export default {
         gender,
         contactNumber,
         interest,
-        emergencyContact
+        emergencyContact,
+        profilePhoto
       });
 
       const user = await UsersModel.findByIdAndUpdate(req.user.id, { name, age, gender, contactNumber,interest, emergencyContact, profilePhoto});
