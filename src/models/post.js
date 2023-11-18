@@ -23,6 +23,11 @@ const PostSchema = new Schema({
         required: true
     },
 
+    address : {
+        type: String,
+        required: true
+    },
+
     location: {
         type: {
             type: String,
@@ -74,6 +79,14 @@ const PostSchema = new Schema({
             }
         }
     ],
+
+    startTime: {
+        type: String
+    },
+    
+    endTime : {
+        type: String
+    },
 
     acceptedVolunteerId: {
         type: mongoose.Types.ObjectId,

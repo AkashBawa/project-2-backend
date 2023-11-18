@@ -8,7 +8,10 @@ import userModel from '../models/user.js';
 const PostJoi = Joi.object({
     date: Joi.string().required(),
     time: Joi.string().required(),
+    // startTime: Joi.string().optional,
+    endTime: Joi.string().optional(),
     serviceTitle: Joi.string().required(),
+    address: Joi.string().required(),
     location: Joi.object({
         coordinates: Joi.array().max(2)
     }),
