@@ -8,6 +8,9 @@ import EventsController from "./../controllers/events.js"
 
 const router = express.Router();
 
+// Define the route for deleting a post
+
+
 router.post('/signup', UserController.signup);
 router.post('/login', UserController.login);
 router.get("/postList", JWtService.validateToken);
@@ -19,6 +22,8 @@ router.post("/fetchPost", JWtService.validateToken, PostController.fetchPost);
 router.post("/addpost", JWtService.validateToken, PostController.addPost);
 router.put("/sendInvitation", JWtService.validateToken, PostController.sendInvitation);
 router.post("/updateRating", JWtService.validateToken, PostController.updateRating)
+router.post("/deletePost/:postId", JWtService.validateToken, PostController.deletePost);
+// module.exports = router;
 
 // volenteer Route
 router.post("/updateProfileVol", JWtService.validateToken, volenteerController.updateUserVolenteerProfile);
@@ -34,5 +39,7 @@ router.get("/getReview", JWtService.validateToken, volenteerController.getReview
 router.get("/eventList", JWtService.validateToken, EventsController.fetchEvents);
 router.post("/joinEvent", JWtService.validateToken, EventsController.joinEvent);
 router.get("/fetchMyEvents", JWtService.validateToken, EventsController.fetchAllJoinedEvents);
+
+
 
 export default router;

@@ -16,7 +16,7 @@ const PostJoi = Joi.object({
         coordinates: Joi.array().max(2)
     }),
     serviceType: Joi.string().required()
-    
+
 })
 
 const addPost = async (req, res, next) => {
@@ -25,12 +25,12 @@ const addPost = async (req, res, next) => {
         const userId = req.user.id;
         const role = req.user.role;
 
-        if(role == "volunteer") {
+        if (role == "volunteer") {
             throw new Error("Access denied");
         }
 
         const joiResponse = await JoiServices.validateBodyAsync(PostJoi, req.body);
-        const newPost = await new postModel({userId, ...req.body}).save();
+        const newPost = await new postModel({ userId, ...req.body }).save();
 
         return res.json({
             success: true,
@@ -38,7 +38,7 @@ const addPost = async (req, res, next) => {
         }).status(201)
 
     } catch (err) {
-        next (err);
+        next(err);
     }
 }
 
@@ -51,15 +51,15 @@ const fetchPost = async (req, res, next) => {
         let query = {
             status: "PENDING"
         }
-        
-        if(coordiates) {
+
+        if (coordiates) {
             query.location = {
                 $near: {
-                    "$geometry" : {
+                    "$geometry": {
                         type: "Point",
                         coordinates: coordiates
                     },
-                    "$maxDistance" : maxDistace
+                    "$maxDistance": maxDistace
                 }
             }
         }
@@ -70,7 +70,7 @@ const fetchPost = async (req, res, next) => {
         })
 
     } catch (err) {
-        next (err);
+        next(err);
     }
 }
 
@@ -78,14 +78,14 @@ const fetchPostByUser = async (req, res, next) => {
     try {
 
         const userId = req.user.id;
-        const posts = await postModel.find({userId}).populate('invitations.user');
+        const posts = await postModel.find({ userId }).populate('invitations.user');
         return res.json({
             success: true,
             posts
         })
 
     } catch (err) {
-        next (err);
+        next(err);
     }
 }
 
@@ -93,7 +93,7 @@ const editPost = async (req, res, next) => {
     try {
 
     } catch (err) {
-        next (err);
+        next(err);
     }
 };
 
@@ -106,17 +106,17 @@ const sendInvitation = async (req, res, next) => {
         const fetchPost = await postModel.findById(postId);
         let invitations = fetchPost.toObject().invitations;
 
-        if(!invitations || invitations.length == 0) {
-            invitations = [ { user: userId, status: "PENDING"} ];    
+        if (!invitations || invitations.length == 0) {
+            invitations = [{ user: userId, status: "PENDING" }];
         } else {
             const index = invitations.map((invite) => invite.user.toString()).indexOf(userId);
-            if(index > -1) {
+            if (index > -1) {
                 throw new Error("User already has an invite");
             } else {
-                invitations.push( { user: userId, status: "PENDING"})
+                invitations.push({ user: userId, status: "PENDING" })
             }
         }
-        
+
         fetchPost.invitations = invitations;
 
         const updatePost = await fetchPost.save();
@@ -134,11 +134,49 @@ const sendInvitation = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
     try {
+        console.log("Delete Post Request:", req);
+        const postId = req.params.postId;
+        console.log("Deleting post with ID:", postId);
 
+        // Check if the post with the given postId exists
+        const postToDelete = await postModel.findById(postId);
+        if (!postToDelete) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found",
+            });
+        }
+
+        // Check if the user making the request is the owner of the post (userId should match the requester's userId)
+        const userId = req.user.id;
+        if (postToDelete.userId.toString() !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: "Unauthorized to delete this post",
+            });
+        }
+
+        // Perform the deletion
+        await postModel.findByIdAndDelete(postId);
+
+        return res.json({
+            success: true,
+            message: "Post deleted successfully",
+        });
     } catch (err) {
-        next (err);
+        next(err);
     }
-}
+};
+
+
+
+// const deletePost = async (req, res, next) => {
+//     try {
+
+//     } catch (err) {
+//         next (err);
+//     }
+// }
 
 const invitationResponse = async (req, res, next) => {
     try {
@@ -146,34 +184,34 @@ const invitationResponse = async (req, res, next) => {
         const userId = req.user.id;
         const { postId, acceptedUserId, status } = req.body;
 
-        if( !(status == "REJECTED" || status == "ACCEPTED")) {
+        if (!(status == "REJECTED" || status == "ACCEPTED")) {
             throw new Error("Invalid status");
         }
 
         const currentPost = await postModel.findById(postId);
-        
-        if(currentPost.status === "BOOKED" ) {
+
+        if (currentPost.status === "BOOKED") {
             throw new Error("Booked Already")
         }
         const objectVersion = currentPost.toObject();
 
         let index = -1;
 
-        for( let i = 0; i < objectVersion.invitations.length; i++) {
+        for (let i = 0; i < objectVersion.invitations.length; i++) {
             const invite = objectVersion.invitations[i];
-            if(invite.user.toString() == acceptedUserId ) {
+            if (invite.user.toString() == acceptedUserId) {
                 index = i;
                 break;
             }
         }
 
-        if(index == -1 ) {
+        if (index == -1) {
             throw new Error("No user found")
         };
 
         currentPost.invitations[index].status = status;
 
-        if(status == "ACCEPTED") {
+        if (status == "ACCEPTED") {
             currentPost.status = "BOOKED"
             currentPost.acceptedVolunteerId = acceptedUserId;
         };
@@ -183,7 +221,7 @@ const invitationResponse = async (req, res, next) => {
             message: "Status updated",
 
         })
-        
+
 
     } catch (err) {
         next(err)
@@ -194,7 +232,7 @@ const fetchPostByVolunteer = async (req, res, next) => {
     try {
 
         const userId = req.user.id;
-        const postDetails = await postModel.find({"invitations.user" : userId});
+        const postDetails = await postModel.find({ "invitations.user": userId });
 
         return res.json({
             success: true,
@@ -215,12 +253,12 @@ const updateRating = async (req, res, next) => {
         const post = await postModel.findById(id)
         let point = rating * 10
         const user = await userModel.findById(post.acceptedVolunteerId)
-        if(user.point){
+        if (user.point) {
             user.point = point + user.point
-        }else{
+        } else {
             user.point = point
         }
-        
+
         await user.save()
         return res.json({
             success: true,
@@ -228,7 +266,7 @@ const updateRating = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-   
+
 }
 
 
@@ -246,5 +284,8 @@ export default {
     fetchPostByVolunteer,
     updateRating
 }
+
+
+
 
 
