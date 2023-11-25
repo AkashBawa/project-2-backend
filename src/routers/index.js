@@ -22,7 +22,7 @@ router.post("/fetchPost", JWtService.validateToken, PostController.fetchPost);
 router.post("/addpost", JWtService.validateToken, PostController.addPost);
 router.put("/sendInvitation", JWtService.validateToken, PostController.sendInvitation);
 router.post("/updateRating", JWtService.validateToken, PostController.updateRating)
-router.post("/deletePost/:postId", JWtService.validateToken, PostController.deletePost);
+router.delete("/deletePost/:postId", JWtService.validateToken, PostController.deletePost);
 // module.exports = router;
 
 // volenteer Route
