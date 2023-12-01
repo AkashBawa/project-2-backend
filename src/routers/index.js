@@ -33,7 +33,7 @@ router.post("/createEvent", JWtService.validateToken, EventsController.createEve
 router.get("/volunteerPosts", JWtService.validateToken, PostController.fetchPostByVolunteer);
 router.get("/averageRating", JWtService.validateToken, volenteerController.getRating);
 router.get("/getReview", JWtService.validateToken, volenteerController.getReview);
-
+router.get("/postByVolunteer", JWtService.validateToken, PostController.getVolunteerPost);
 
 // events
 router.get("/eventList", JWtService.validateToken, EventsController.fetchEvents);

@@ -168,6 +168,19 @@ const deletePost = async (req, res, next) => {
     }
 };
 
+const getVolunteerPost = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const posts = await postModel.find({ acceptedVolunteerId: userId });
+        return res.json({
+            success: true,
+            posts
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 
 
 // const deletePost = async (req, res, next) => {
@@ -232,7 +245,7 @@ const fetchPostByVolunteer = async (req, res, next) => {
     try {
 
         const userId = req.user.id;
-        const postDetails = await postModel.find({ "invitations.user": userId });
+        const postDetails = await postModel.find({status: { $ne : "PENDING" }  ,"invitations.user": userId });
 
         return res.json({
             success: true,
@@ -282,10 +295,6 @@ export default {
     fetchPostByUser,
     invitationResponse,
     fetchPostByVolunteer,
-    updateRating
+    updateRating,
+    getVolunteerPost
 }
-
-
-
-
-
