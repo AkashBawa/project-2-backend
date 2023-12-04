@@ -37,31 +37,7 @@ export default {
    
   },
 
-  
 
-  // updateElderProfile:   async (req, res, next) => {
-  //   try{
-  //       const { name, age, gender, contactNumber, interest } = req.body;
-  //       await ElderModel.findOneAndUpdate({
-  //           user: new mongoose.Types.ObjectId(req.user.id),
-            
-  //       },
-  //       {
-  //           name: name,
-  //           age: age,
-  //           gender: gender,
-  //           contactNumber: contactNumber,
-  //           interest: interest,
-  //       })
-  //       return res.json({
-  //           message: "Profile Updated successfully",
-  //         })
-  //   }
-  //   catch (err) {
-  //       next(err);
-  //     }
-  // }
-  
 
 };
 
