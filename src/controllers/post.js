@@ -63,7 +63,7 @@ const fetchPost = async (req, res, next) => {
                 }
             }
         }
-        const posts = await postModel.find(query).populate('userId');
+        const posts = await postModel.find(query).sort({"createdAt" : -1}).populate('userId');
         return res.json({
             success: true,
             posts
@@ -78,7 +78,7 @@ const fetchPostByUser = async (req, res, next) => {
     try {
 
         const userId = req.user.id;
-        const posts = await postModel.find({ userId }).populate('invitations.user');
+        const posts = await postModel.find({ userId }).sort({"createdAt" : -1}).populate('invitations.user');
         return res.json({
             success: true,
             posts
@@ -171,7 +171,7 @@ const deletePost = async (req, res, next) => {
 const getVolunteerPost = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const posts = await postModel.find({ acceptedVolunteerId: userId });
+        const posts = await postModel.find({ acceptedVolunteerId: userId }).sort({"createdAt" : -1});
         return res.json({
             success: true,
             posts
@@ -245,7 +245,7 @@ const fetchPostByVolunteer = async (req, res, next) => {
     try {
 
         const userId = req.user.id;
-        const postDetails = await postModel.find({status: { $ne : "PENDING" }  ,"invitations.user": userId });
+        const postDetails = await postModel.find({status: { $ne : "PENDING" }  ,"invitations.user": userId }).sort({"createdAt" : -1});
 
         return res.json({
             success: true,

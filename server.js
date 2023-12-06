@@ -16,6 +16,10 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit:'50mb'
 }));
+app.use((req, res, next) => {
+    console.log(req);
+    next();
+  });
 app.use(Router);
 
 app.use ((err, req, res, next) => {
