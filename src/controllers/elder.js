@@ -7,15 +7,6 @@ export default {
   updateUserProfile: async (req, res, next) => {
     try {
       const { name, age, gender, contactNumber, interest, emergencyContact, profilePhoto } = req.body;
-      console.log("Received form data:", {
-        name,
-        age,
-        gender,
-        contactNumber,
-        interest,
-        emergencyContact,
-        profilePhoto
-      });
 
       const user = await UsersModel.findByIdAndUpdate(req.user.id, { name, age, gender, contactNumber,interest, emergencyContact, profilePhoto});
       return res.json({

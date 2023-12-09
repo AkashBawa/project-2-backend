@@ -21,7 +21,6 @@ const PostJoi = Joi.object({
 
 const addPost = async (req, res, next) => {
     try {
-        console.log(req.body)
         const userId = req.user.id;
         const role = req.user.role;
 
@@ -134,9 +133,7 @@ const sendInvitation = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
     try {
-        console.log("Delete Post Request:", req);
         const postId = req.params.postId;
-        console.log("Deleting post with ID:", postId);
 
         // Check if the post with the given postId exists
         const postToDelete = await postModel.findById(postId);
