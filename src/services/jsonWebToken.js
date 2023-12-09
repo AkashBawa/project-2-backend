@@ -16,7 +16,6 @@ const generateToken = async (payload) => {
         
         })
     } catch (err) {
-        console.log(err);
         throw new Error("Error in generating token");
     }
 }

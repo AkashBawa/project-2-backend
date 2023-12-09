@@ -32,7 +32,7 @@ const createEvents = async (req, res, next) => {
 const fetchEvents = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const events = await EventsM.find({"userId" : {$ne : userId}});
+        const events = await EventsM.find({"userId" : {$ne : userId}}).sort({"createdAt" : -1});
         return res.json({
             success: true,
             events
@@ -83,7 +83,7 @@ const fetchAllJoinedEvents = async (req, res, next) => {
 
         const userId = req.user.id;
 
-        const events = await EventsM.find( { $or: [ { participants: userId }, {userId : userId} ]  });
+        const events = await EventsM.find( { $or: [ { participants: userId }, {userId : userId} ]  }).sort({"createdAt" : -1});
 
         return res.json({
             success: true,

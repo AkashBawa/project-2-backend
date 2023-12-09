@@ -34,7 +34,7 @@ export default {
             const { email, password } = req.body;
 
             const userData = await UsersModel.findOne({email});
-            // console.log(userData);
+
             await byScruptService.comparePassword(password, userData.password);
 
             const generateToken = await jwtService.generateToken( {userId: userData._id, role: userData.role} );
